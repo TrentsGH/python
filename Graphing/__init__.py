@@ -10,6 +10,23 @@ class graph(Canvas):
                'grid':True,
                'box':True,
                }
+    symboles = ['-',
+                '*',
+                '-*',
+                '^',
+                '-^',
+                '#',
+                '_#']
+    colors = ['red',
+              'yellow',
+              'green',
+              'blue',
+              'purple',
+              'pink',
+              'black',
+              'brown',
+              'white',
+              'orange']
     def __init__(self,master=None,*data,**options):
 
         if not master:
@@ -26,11 +43,27 @@ class graph(Canvas):
         if self.launch:
             self.play()
     def parse(self,data):
-        pass
+        groups = []
+        temp = {}
+        n = 0
+        temp['']
+        for i in data:
+            if type(i) is list or type(i) is tuple:
+                if len(temp)==0:
+                    temp['x']=i
+                elif len(temp) ==1:
+                    temp['y'] =i
+
+                else:
+                    groups.append(temp)
+                    temp = {}
+                    temp['x']=i
+            elif i in self.symboles:
+                temp['sym'] = i
+            elif i in self.colors:
+                temp['col'] = i
+        
+            
         
 
-    def play(self):
-        mainloop()
 
-
-k = graph()
