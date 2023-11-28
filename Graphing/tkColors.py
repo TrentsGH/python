@@ -100,4 +100,5 @@ class numColor:
                 canvas.create_text(i+3+dx,65,text='{}'.format(round(step*i+self.min,2)),anchor=tk.CENTER)
     
         
-
+f = numColor(0,10)
+print(f)

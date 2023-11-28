@@ -5,11 +5,13 @@ from numb_space import vect, linspace
 class graph(Canvas):
     #Configuration Options
     options = {'width':600,
-               'height':400,
-               'ax_dx':70,
-               'ax_dy':70,
-               'offset_y':-25,
+               'height':500,
+               'ax_dx':80,
+               'ax_dy':100,
+               'offset_y':-20,
                'offset_x':0,
+               'offset_title':15,
+               'offset_titleAX':45,
                'bg':'white',
                'grid_color':'light grey',
                'text_color':'black',
@@ -23,9 +25,13 @@ class graph(Canvas):
                'min_y':False,
                'max_y':False,
                'title':'Untitled',
+               'title_x':'',
+               'title_y':'',
                'nx':9,
                'ny':9,
-               'master':None
+               'master':None,
+               'title_font':('Times New Roman bold',16),
+               'axis_font':('Times New Roman bold',12)
                }
     #Plot Syles
     symboles = ['~',
@@ -78,8 +84,45 @@ class graph(Canvas):
         self.make_grid()
         self.make_axis() 
         self.scale()
+        self.make_title()
+        self.axis_titles()
         
         
+    def make_title(self):
+        op = self.options
+        offy = op['offset_y']
+        title = op['title']
+        title_off = op['offset_title']
+        x = op['width']/2.0
+        tip = op['grid_tip']
+        y =  op['ax_dy']+offy-title_off-tip
+        font = op['title_font']
+        self.create_text(x,y,text=title,font=font)
+    
+    def axis_titles(self):
+        op = self.options
+        offy = op['offset_y']
+        offx = op['offset_x']
+        titlex = op['title_x']
+        titley = op['title_y']
+        title_off = op['offset_titleAX']
+        tip = op['grid_tip']
+
+        dx1 = op['ax_dx']+offx
+        dy1 = op['ax_dy']+offy
+        dx2 = op['width']-dx1+offx
+        dy2 = op['height']-dy1+offy
+
+        y_ax_hor = dy2+tip+title_off
+        x_ax_hor = (dx1 + dx2)/2.0
+
+        x_ax_ver = dx1 - tip - title_off
+        y_ax_ver = (dy1+dy2)/2.0
+        
+
+        font = op['axis_font']
+        self.create_text(x_ax_hor,y_ax_hor,text=titlex,font=font)
+        self.create_text(x_ax_ver,y_ax_ver,text=titley,font=font,angle=90)
 
     def play(self):
         self.pack(expand=True,fill=BOTH)
@@ -141,11 +184,11 @@ class graph(Canvas):
         for i in range(nx):
             x = dx1 + (i)*dx
             grid.append(self.create_line(x,dy1-tip,x,dy2+tip,fill=op['grid_color'],dash=(4,4)))
-            grid.append(self.create_text(x,dy2+1.5*tip,text=str(num_x[i])))
+            grid.append(self.create_text(x,dy2+1.5*tip,text=str(round(num_x[i],2))))
         for i in range(ny):
             y = dy1 + (i)*dy
             grid.append(self.create_line(dx1-tip,y,dx2+tip,y,fill=op['grid_color'],dash=(4,4)))
-            grid.append(self.create_text(dx1-2.0*tip,y,text=str(num_y[i])))
+            grid.append(self.create_text(dx1-2.0*tip,y,text=str(round(num_y[i],2))))
 
     def parse(self,data):
         groups = []
@@ -154,9 +197,9 @@ class graph(Canvas):
         temp['id'] = n
         
         for i in data:
-            print(i)
+        
             if type(i).__name__ in ('list', 'tuple','vect'):
-                print(len(temp))
+                
                 if len(temp)==1:
                     temp['x']=i
                 elif len(temp) ==2:
@@ -206,7 +249,7 @@ class graph(Canvas):
         for a in xy:
             min_ = op['min_{}'.format(a)]
             if not min_:
-                min_ = min(self.lines[0]['x'])
+                min_ = min(self.lines[0][a])
                 for i in self.lines:
                     temp = self._get_min(i,a)
                     if min_ > temp:
@@ -262,20 +305,36 @@ class graph(Canvas):
         if sym == op[1]:
             for i in range(len(x)):
                 self.create_text(X[i],Y[i],text='+',fill=col,font=('Times New Roman',16))
-
-        
-        
+        if sym == op[2]:
+            for i in range(len(x)-1):
+                self.create_line(X[i],Y[i],(X[i]+X[i+1])/2.0,(Y[i]+Y[i+1])/2.0,fill=col,width=2)
+        if sym == op[3]:
+            for i in range(len(x)):
+                self.create_text(X[i],Y[i],text='*',fill=col,font=('Times New Roman',16))
+            
+            
+'''
+  symboles = ['~',
+                '+',
+                '-',
+                '*',
+                '-*',
+                '^',
+                '-^',
+                '#',
+                '_#']  
+  '''      
 
 def f(x):
-    return -x**9+x**7-x**5+x**3-x
+    return x**2
 
-x = linspace(-3.2,3.2,1000)
+x = linspace(-10,10,20)
 y = f(x)
 
 
       
-k = graph(x,y)
-print(k.options)
+a=graph(x,y,'red',title = 'Example Graph',)
+
 
         
             
