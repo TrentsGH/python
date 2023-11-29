@@ -80,7 +80,7 @@ class numColor:
     
 
         def __write__(self,x):
-            __repr__()
+            self.__repr__()
             return ''
         return ''
     
