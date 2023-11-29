@@ -1,7 +1,7 @@
 from tkinter import *
 import tkColors
 from numb_space import vect, linspace
-
+import math 
 class graph(Canvas):
     #Configuration Options
     options = {'width':600,
@@ -326,14 +326,14 @@ class graph(Canvas):
   '''      
 
 def f(x):
-    return x**2
+    return math.sin(x)
 
-x = linspace(-10,10,20)
-y = f(x)
+x = linspace(-math.pi,math.pi,100)
+y = x.funct(f)
 
 
       
-a=graph(x,y,'red',title = 'Example Graph',)
+a=graph(x,y,title = 'Example Graph',)
 
 
         

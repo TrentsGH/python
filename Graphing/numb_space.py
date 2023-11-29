@@ -66,6 +66,12 @@ class vect(list):
             for i in range(self.n):
                 ans.append(self[i]/x)
         return vect(ans)
+    def funct(self,f):
+        ans = []
+        for i in self:
+            ans.append(f(i))
+        return vect(ans)
+
 
 
 
